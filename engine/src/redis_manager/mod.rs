@@ -7,7 +7,7 @@ pub mod redis_manager {
 
     use redis::{Commands, Connection};
 
-    use crate::{custom_types, types::DBMessage};
+    use crate::types::DBMessage;
 
     use super::*;
 
@@ -54,7 +54,7 @@ pub mod redis_manager {
             message: &DBMessage,
             conn: &mut Connection,
         ) -> redis::RedisResult<()> {
-            conn.lpush(
+            conn.lpush::<_, _, ()>(
                 "db_processor",
                 serde_json::to_string(message).expect("Failed to serialize message"),
             )?;
@@ -67,17 +67,20 @@ pub mod redis_manager {
             message: &DBMessage,
             conn: &mut Connection,
         ) -> redis::RedisResult<()> {
-            conn.publish(
+            conn.publish::<_, _, ()>(
                 channel,
                 serde_json::to_string(message).expect("Failed to serialize message"),
             )?;
             Ok(())
         }
 
-        pub async fn send_message_to_api(client_id : &String, message : &custom_types::orderbook_engine_messages::MessageFromOrderBook, conn : &mut Connection) -> redis::RedisResult<()> {
-            conn.publish(client_id, serde_json::to_string(message).expect("Failed to serialize message"))?;
+        pub async fn send_message_to_api(
+            client_id: &String,
+            message: &serde_json::Value,
+            conn: &mut Connection,
+        ) -> redis::RedisResult<()> {
+            conn.publish::<_, _, ()>(client_id, message.to_string())?;
             Ok(())
-
         }
     }
 }
