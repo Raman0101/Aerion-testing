@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/redismanager/index.ts","./src/tests/orderbook.test.ts","./src/trade/engine.ts","./src/trade/orderbook.ts","./src/utils/klines.ts"],"version":"5.9.3"}

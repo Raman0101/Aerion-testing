@@ -1,0 +1,28 @@
+package routes
+
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/raghav1030/kazex/cmd/api/controllers"
+)
+
+func OrderRoutes(api fiber.Router) {
+	order_router := api.Group("/orders")
+
+	order_router.Post("/", controllers.CRUDOrders)
+	order_router.Get("/", controllers.GetOrdersByQuery)
+}
+
+func DepthRoutes(api fiber.Router) {
+	depth_router := api.Group("/depth")
+
+	depth_router.Get("/", controllers.GetDepth)
+}
+
+func AerionCompatRoutes(app *fiber.App) {
+	app.Post("/order", controllers.AerionCreateOrder)
+	app.Delete("/order", controllers.AerionCancelOrder)
+	app.Get("/depth", controllers.AerionGetDepth)
+	app.Get("/ticker", controllers.AerionGetTicker)
+	app.Get("/balance", controllers.AerionGetBalance)
+	app.Get("/klines", controllers.AerionGetKlines)
+}

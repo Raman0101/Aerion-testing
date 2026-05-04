@@ -1,0 +1,47 @@
+{
+    "balances" : {
+        "1": {
+            "balance": {
+                "available": 6000,
+                "locked": 0
+            },
+            "TEST" : {
+                "available": 30,
+                "locked": 0
+            }
+        },
+        "2": {
+            "balance": {
+                "available": 4000,
+                "locked": 0
+            },
+            "TEST" : {
+                "available": 10,
+                "locked": 0
+            }
+        }
+    },
+    "orderBooks": [
+        {
+            "symbol": "TEST_INR",
+            "baseAsset": "TEST",
+            "quoteAsset": "INR",
+            "bids": [
+                {
+                    "orderId": "1.43242",
+                    "amount": 12,
+                    "quantity": 1.3,
+                    "clientId": "1"
+                }
+            ],
+            "asks": [
+                {
+                    "orderId": "1.43242",
+                    "amount": 12,
+                    "quantity": 1.3,
+                    "clientId": "1"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+FROM rust:1.80-bookworm AS build
+
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends protobuf-compiler \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY protobuf ./protobuf
+COPY engine ./engine
+
+WORKDIR /app/engine
+RUN cargo build --release
+
+FROM debian:bookworm-slim
+
+COPY --from=build /app/engine/target/release/engine /usr/local/bin/kazex-engine
+
+CMD ["kazex-engine"]
