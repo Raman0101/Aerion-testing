@@ -75,10 +75,16 @@ For the Aerion websocket service:
 RAILWAY_DOCKERFILE_PATH=Dockerfile.websocket
 REDIS_URL=<same Redis URL used by Go API and Rust engine>
 Public networking: enabled
+Public networking target port: 3002
 ```
 
 After Railway gives this service a public URL, use it as `wss://...` in the
 frontend's `VITE_WS_URL`.
+
+The websocket service also starts on Railway's injected `PORT`, but Railway's
+public domain must route to one of the ports printed in the deploy logs. If HTTP
+logs show `502`, compare the Settings > Networking target port with the
+`WebSocket server listening on port ...` log line.
 
 For the Aerion frontend service:
 
@@ -145,7 +151,7 @@ For the currently deployed Railway backend, use:
 
 ```env
 VITE_API_URL=https://go-api-production-96d5.up.railway.app
-VITE_WS_URL=wss://websocket-production-8137.up.railway.app
+VITE_WS_URL=wss://websocket-production-4658.up.railway.app
 ```
 
 ## Aerion Websocket Service Variables
@@ -153,7 +159,8 @@ VITE_WS_URL=wss://websocket-production-8137.up.railway.app
 The websocket service reads Railway's port and Redis URL:
 
 ```ts
-new WebSocketServer({ port: Number(process.env.PORT ?? 3002) })
+process.env.PORT
+process.env.WEBSOCKET_PORT
 ```
 
 ```ts
