@@ -1,0 +1,22 @@
+FROM node:22-alpine AS build
+
+WORKDIR /app
+
+ARG VITE_API_URL
+ARG VITE_WS_URL
+
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_WS_URL=$VITE_WS_URL
+
+COPY Aerion-main/package.json Aerion-main/package-lock.json ./
+COPY Aerion-main/apps ./apps
+COPY Aerion-main/packages ./packages
+COPY Aerion-main/turbo.json ./turbo.json
+
+RUN npm ci
+RUN npm run build --workspace=frontend
+
+FROM caddy:2-alpine
+
+COPY Caddyfile.frontend /etc/caddy/Caddyfile
+COPY --from=build /app/apps/frontend/dist /usr/share/caddy

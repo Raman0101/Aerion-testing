@@ -1,11 +1,14 @@
 # Kazex + Aerion Deployment
 
-This repo can be hosted as two services:
+This repo can be hosted as five services:
 
 - `kazex-api`: public Go/Fiber HTTP API
 - `kazex-engine`: private Rust worker that consumes Redis jobs
+- `redis`: shared queue and pub/sub database
+- `aerion-websocket`: public websocket bridge for Redis streams
+- `aerion-frontend`: public Vite/React frontend
 
-Both services need the same Redis instance.
+The API, engine, and websocket services need the same Redis instance.
 
 ## Runtime Variables
 
@@ -77,6 +80,19 @@ Public networking: enabled
 After Railway gives this service a public URL, use it as `wss://...` in the
 frontend's `VITE_WS_URL`.
 
+For the Aerion frontend service:
+
+```txt
+RAILWAY_DOCKERFILE_PATH=Dockerfile.frontend
+VITE_API_URL=https://your-kazex-api-domain
+VITE_WS_URL=wss://your-aerion-websocket-domain
+Public networking: enabled
+```
+
+The frontend is a static Vite build served by Caddy. `VITE_API_URL` and
+`VITE_WS_URL` are build-time variables, so redeploy the frontend after changing
+either value.
+
 ## Aerion Frontend Variables
 
 Change the frontend to read URLs from Vite env vars:
@@ -98,6 +114,39 @@ VITE_WS_URL=wss://your-aerion-websocket-domain
 
 If you do not deploy the Aerion websocket service yet, the REST endpoints will
 still work, but live depth/ticker updates will not stream into the browser.
+
+## Deploy Frontend On Vercel
+
+Use Vercel only for the frontend. Keep the Go API, Rust engine, Redis, and
+websocket services on Railway.
+
+When importing this repo into Vercel, set:
+
+```txt
+Root Directory: Aerion-main
+Framework Preset: Other
+Install Command: npm ci
+Build Command: npm run build --workspace=frontend
+Output Directory: apps/frontend/dist
+```
+
+The `Aerion-main/vercel.json` file already contains those build settings and an
+SPA rewrite to serve `index.html` for client-side routes.
+
+Set these Vercel environment variables for Production, Preview, and Development
+as needed:
+
+```env
+VITE_API_URL=https://your-kazex-api-domain
+VITE_WS_URL=wss://your-aerion-websocket-domain
+```
+
+For the currently deployed Railway backend, use:
+
+```env
+VITE_API_URL=https://go-api-production-96d5.up.railway.app
+VITE_WS_URL=wss://websocket-production-8137.up.railway.app
+```
 
 ## Aerion Websocket Service Variables
 
