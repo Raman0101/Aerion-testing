@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@repo/types": "*",
     "axios": "^1.7.4",
     "lightweight-charts": "^4.2.0",
     "react": "^18.3.1",

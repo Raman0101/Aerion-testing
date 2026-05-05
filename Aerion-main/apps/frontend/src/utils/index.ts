@@ -2,7 +2,10 @@ import { BalanceResponse, DepthResponse, CreateOrderResponse, createOrderPayload
 import { AxiosResponse } from "axios"
 import axios from "axios"
 import { KLine } from "../types"
-export const API_URL = "http://localhost:3001"
+
+const viteApiUrl = import.meta.env.VITE_API_URL
+export const API_URL = viteApiUrl && viteApiUrl.length > 0 ? viteApiUrl : "http://localhost:3001"
+
 //import problem
 export function getTicker(symbol: string): Promise<AxiosResponse<tickerResponse>> {
 	return axios.get<tickerResponse>(`${API_URL}/ticker`, {

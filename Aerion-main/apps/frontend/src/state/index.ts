@@ -1,6 +1,5 @@
 import { Balance, DepthResponse, TradeApiResponse } from "@repo/types";
-import { atom, GetRecoilValue, selector } from "recoil";
-import { getDepth } from "../utils";
+import { atom } from "recoil";
 export const user = atom<{
 	id: string, balance: Balance
 }>({
