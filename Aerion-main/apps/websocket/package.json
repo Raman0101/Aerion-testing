@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc -b",
+    "start": "node dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsc -b && node dist"
   },
@@ -11,7 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@repo/types": "*",
     "@types/ws": "^8.5.12",
+    "redis": "^4.7.0",
     "ws": "^8.17.1"
   }
 }

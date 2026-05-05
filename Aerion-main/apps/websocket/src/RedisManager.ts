@@ -4,7 +4,9 @@ export default class RedisManager {
     private client: RedisClientType;
     private static instance: RedisManager;
     private constructor() {
-        this.client = createClient();
+        this.client = createClient({
+            url: process.env.REDIS_URL
+        });
         this.connectToRedis()
     }
     static getInstance() {
@@ -30,4 +32,3 @@ export default class RedisManager {
     }
 
 }
-

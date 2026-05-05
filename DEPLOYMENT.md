@@ -47,8 +47,8 @@ Create one Railway project with:
 1. Redis database
 2. Go API service
 3. Rust engine worker service
-4. Aerion frontend service
-5. Optional Aerion websocket service
+4. Aerion websocket service
+5. Aerion frontend service
 
 For the Go API service:
 
@@ -65,6 +65,17 @@ Public networking: disabled
 ```
 
 The engine is a worker. It does not need a public URL.
+
+For the Aerion websocket service:
+
+```txt
+RAILWAY_DOCKERFILE_PATH=Dockerfile.websocket
+REDIS_URL=<same Redis URL used by Go API and Rust engine>
+Public networking: enabled
+```
+
+After Railway gives this service a public URL, use it as `wss://...` in the
+frontend's `VITE_WS_URL`.
 
 ## Aerion Frontend Variables
 
@@ -90,7 +101,7 @@ still work, but live depth/ticker updates will not stream into the browser.
 
 ## Aerion Websocket Service Variables
 
-The websocket service should also read Railway's port and Redis URL:
+The websocket service reads Railway's port and Redis URL:
 
 ```ts
 new WebSocketServer({ port: Number(process.env.PORT ?? 3002) })

@@ -6,7 +6,7 @@ export class WebSocketManager {
 	private initialized: boolean = false
 	private callbacks: { [key: string]: ((data: any) => void)[] } = {}
 	private constructor() {
-		this.socket = new WebSocket("ws://localhost:3002")
+		this.socket = new WebSocket(import.meta.env.VITE_WS_URL ?? "ws://localhost:3002")
 		this.init()
 	}
 	static getInstance() {
